@@ -3,7 +3,8 @@
 
 static const char *TAG = "lcd";
 
-esp_lcd_panel_handle_t lcd_setup(){
+void lcd_setup(){
+
     gpio_config_t gpio_cfg = {
         .pin_bit_mask = 1ULL << LCD_BL,
         .mode = GPIO_MODE_OUTPUT,
@@ -36,6 +37,7 @@ esp_lcd_panel_handle_t lcd_setup(){
     esp_lcd_panel_io_handle_t io_handle = NULL;
     esp_lcd_panel_handle_t panel_handle = NULL;
 
+    const lvgl_port_cfg_t lvgl_cfg = ESP_LVGL_PORT_INIT_CONFIG();
     // Initialising SPI
     ESP_ERROR_CHECK(spi_bus_initialize(LCD_SPI, &bus_cfg, SPI_DMA_CH_AUTO));
     ESP_ERROR_CHECK(gpio_config(&gpio_cfg));
@@ -51,9 +53,24 @@ esp_lcd_panel_handle_t lcd_setup(){
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, 1));
     ESP_ERROR_CHECK(gpio_set_level(LCD_BL, 1));
     //ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_handle, true));
-    lcd_clear(panel_handle);
+    ESP_ERROR_CHECK(lvgl_port_init(&lvgl_cfg));
 
-    return panel_handle;
+    lvgl_port_display_cfg_t disp_cfg = {
+        .io_handle = io_handle,    
+        .panel_handle = panel_handle,
+        .buffer_size = 5504,       
+        .double_buffer = 1,     
+        .hres = 172,
+        .vres = 320,
+        .monochrome = 0,
+        .flags.buff_dma = 1,
+        .flags.swap_bytes = 1,
+    };
+    lv_display_t *disp = lvgl_port_add_disp(&disp_cfg);
+    if (disp == NULL){
+        ESP_LOGE(TAG,  "couldn't initialise display");
+    };
+
 }
 
 void lcd_draw_screen(rectangle_t* rect_array, size_t length, esp_lcd_panel_handle_t panel_handle, uint16_t colour){

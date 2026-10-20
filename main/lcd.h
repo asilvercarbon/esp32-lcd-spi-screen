@@ -14,6 +14,7 @@
 #include "esp_heap_caps.h"
 #include <stdint.h>
 #include "esp_partition.h"
+#include "esp_lvgl_port.h"
 
 // PINS for ESP32 for WAVESHARE 1.47" LCD 
 #define LCD_BL 22
@@ -41,7 +42,7 @@ typedef struct {
     uint16_t h;
 } rectangle_t;
 
-esp_lcd_panel_handle_t lcd_setup(void);
+void lcd_setup(void);
 void lcd_draw_screen(rectangle_t* rect_array, size_t length, esp_lcd_panel_handle_t panel_handle, uint16_t colour);
 void lcd_clear(esp_lcd_panel_handle_t panel_handle);
 void lcd_draw_image(esp_lcd_panel_handle_t panel_handle, const uint8_t *img, size_t len);
