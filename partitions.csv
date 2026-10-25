@@ -2,5 +2,6 @@
 nvs,      data, nvs,       0x9000,   24K,
 phy_init, data, phy,       0xf000,   4K,
 factory,  app,  factory,   0x10000,  1M,
-frames,   data, undefined, 0x110000, 0x6F0000,
+anim_listen, data, 0x40, 0x110000, 0x200000,
+anim_wait,   data, 0x41, 0x310000, 0x4C0000,
 

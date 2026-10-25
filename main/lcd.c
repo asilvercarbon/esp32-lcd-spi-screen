@@ -52,7 +52,7 @@ void lcd_setup(){
     ESP_ERROR_CHECK(esp_lcd_panel_set_gap(panel_handle, 34, 0));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, 1));
     ESP_ERROR_CHECK(gpio_set_level(LCD_BL, 1));
-    //ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_handle, true));
+    ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_handle, true));
     ESP_ERROR_CHECK(lvgl_port_init(&lvgl_cfg));
 
     lvgl_port_display_cfg_t disp_cfg = {
